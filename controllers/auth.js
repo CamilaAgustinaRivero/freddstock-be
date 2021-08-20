@@ -1,14 +1,37 @@
 const { response } = require('express');
 const bcrypt = require('bcryptjs');
 const User = require('../models/User');
+const { generateJWT } = require('../helpers/jwt');
 
-const loginUser = (req, res = response) => {
+const loginUser = async (req, res = response) => {
     const { email, password } = req.body;
-    res.status(200).json({
-        ok: true,
-        email,
-        password
-    });
+
+    try {
+        const user = await User.findOne({ email });
+        const validatePassword = bcrypt.compareSync(password, user.password);
+
+        if (!user || !validatePassword) {
+            return res.status(400).json({
+                ok: false,
+                msg: 'Invalid credentials'
+            });
+        }
+
+        // JWT
+        const token = await generateJWT(user.id, user.name);
+
+        res.status(200).json({
+            ok: true,
+            uid: user.id,
+            token
+        });
+
+    } catch (error) {
+        res.status(500).json({
+            ok: false,
+            msg: 'Internal server error'
+        });
+    }
 };
 
 const newUser = async (req, res = response) => {
@@ -31,9 +54,13 @@ const newUser = async (req, res = response) => {
 
         await user.save();
 
+        //JWT
+        const token = await generateJWT(user.id, user.name);
+
         res.status(201).json({
             ok: true,
-            uid: user.id
+            uid: user.id,
+            token
         });
 
     } catch (error) {
@@ -44,10 +71,12 @@ const newUser = async (req, res = response) => {
     }
 };
 
-const renewToken = (req, res = response) => {
+const renewToken = async (req, res = response) => {
+    const { uid, name } = req;
+    const token = await generateJWT(uid, name);
     res.json({
         ok: true,
-        msg: 'renew'
+        token
     });
 };
 

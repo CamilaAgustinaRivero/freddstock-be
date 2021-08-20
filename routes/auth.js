@@ -6,12 +6,13 @@
 const { Router } = require('express');
 const { check } = require('express-validator');
 const { validateFields } = require('../middlewares/fields');
+const { validateJWT } = require('../middlewares/jwt');
 const { newUser, loginUser, renewToken } = require('../controllers/auth');
 const router = Router();
 
 
 router.post(
-    '/',
+    '/login',
     [
         check('email', 'Email is required.').isEmail(),
         check('password', 'Password is too short').isLength({ min: 6 }),
@@ -19,6 +20,8 @@ router.post(
     ],
     loginUser
 );
+
+router.get('/logout');
 
 router.post(
     '/new',
@@ -32,6 +35,6 @@ router.post(
     newUser
 );
 
-router.get('/renew', renewToken);
+router.get('/renew', validateJWT, renewToken);
 
 module.exports = router;
