@@ -29,17 +29,7 @@ const ProductSchema = Schema({
     visibility: {
         type: Boolean,
         require: true,
-    },
-    category_id: {
-        type: Schema.Types.ObjectId,
-        ref: "Category",
-        require: true,
-    },
-    brand_id: {
-        type: Schema.Types.ObjectId,
-        ref: "Brand",
-        require: true,
-    },
+    }
 });
 
 module.exports = model("Product", ProductSchema);
