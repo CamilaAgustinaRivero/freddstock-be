@@ -3,7 +3,7 @@ const Product = require('../models/Product');
 
 const getProducts = async(req, res = response) => {
     const products = await Product.find().populate('category_id');
-    res.json({
+    res.status(200).json({
         products
     });
 }
@@ -12,7 +12,7 @@ const createProduct = async(req, res = response) => {
     const product = new Product(req.body);
     try {
         await product.save();
-        res.json({
+        res.status(201).json({
             product
         });
     } catch (error) {
@@ -39,7 +39,7 @@ const updateProduct = async(req, res = response) => {
 
         const updatedProduct = await Product.findByIdAndUpdate(productId, newProduct);
         res.status(200).json({
-            updatedProduct
+            original: updatedProduct
         });
 
     } catch (error) {
