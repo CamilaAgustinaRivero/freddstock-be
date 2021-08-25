@@ -16,4 +16,4 @@ const generateJWT = (uid, name) => {
 
 module.exports = {
     generateJWT
-}
+};

@@ -12,8 +12,7 @@ const loginUser = async (req, res = response) => {
 
         if (!user || !validatePassword) {
             return res.status(400).json({
-                ok: false,
-                msg: 'Invalid credentials'
+                msg: 'Invalid credentials.'
             });
         }
 
@@ -21,15 +20,13 @@ const loginUser = async (req, res = response) => {
         const token = await generateJWT(user.id, user.name);
 
         res.status(200).json({
-            ok: true,
             uid: user.id,
             token
         });
 
     } catch (error) {
         res.status(500).json({
-            ok: false,
-            msg: 'Internal server error'
+            msg: 'Internal server error.'
         });
     }
 };
@@ -41,8 +38,7 @@ const newUser = async (req, res = response) => {
         let user = await User.findOne({ email });
         if (user) {
             return res.status(400).json({
-                ok: false,
-                msg: 'Email already in use'
+                msg: 'Email already in use.'
             });
         }
 
@@ -58,15 +54,13 @@ const newUser = async (req, res = response) => {
         const token = await generateJWT(user.id, user.name);
 
         res.status(201).json({
-            ok: true,
             uid: user.id,
             token
         });
 
     } catch (error) {
         res.status(500).json({
-            ok: false,
-            msg: 'Internal server error'
+            msg: 'Internal server error.'
         });
     }
 };
@@ -75,7 +69,6 @@ const renewToken = async (req, res = response) => {
     const { uid, name } = req;
     const token = await generateJWT(uid, name);
     res.json({
-        ok: true,
         token
     });
 };
@@ -84,4 +77,4 @@ module.exports = {
     loginUser,
     newUser,
     renewToken
-}
+};

@@ -1,34 +1,42 @@
-const { Schema, model } = require("mongoose");
+const { Schema, model } = require('mongoose');
 
 const ProductSchema = Schema({
     name: {
         type: String,
         require: true,
     },
+    category_id: {
+        type: Schema.Types.ObjectId,
+        ref: "Category",
+        required: true
+    },
+    brand: {
+        type: String,
+        require: true
+    },
     buy_price: {
         type: Number,
-        require: true,
+        default: 0
     },
     sell_price: {
         type: Number,
-        require: true,
+        default: 0
     },
     description: {
         type: String,
-        require: true,
+        default: 'Inserte la descripción del producto.'
     },
     code_bar: {
         type: String,
-        require: true,
-        unique: true,
+        default: 'Inserte código de barras.'
     },
     stock: {
         type: Number,
-        require: true,
+        default: 0
     },
     visibility: {
         type: Boolean,
-        require: true,
+        default: true
     }
 });
 
