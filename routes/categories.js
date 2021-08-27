@@ -1,5 +1,5 @@
 /*
-    User routes / Categories
+    Category routes / Categories
     host + /api/categories
 */
 
@@ -17,9 +17,17 @@ router.post(
         check('name', 'Category name is required.').not().isEmpty(),
         validateFields
     ],
-    createCategory); 
+    createCategory
+); 
 
-router.put('/:id', updateCategory);
+router.put(
+    '/:id',
+    [
+        check('name', 'Category name is required.').not().isEmpty(),
+        validateFields
+    ],
+    updateCategory
+);
 
 router.delete('/:id', deleteCategory);
 
