@@ -38,14 +38,10 @@ const updateTransaction = async(req, res = response) => {
             ...req.body,
         }
 
-        res.json({
-            newTransaction
-        })
-
-        /*const updatedTransaction = await Transaction.findByIdAndUpdate(transactionId, newTransaction);
+        const updatedTransaction = await Transaction.findByIdAndUpdate(transactionId, newTransaction);
         res.status(200).json({
             original: updatedTransaction
-        });*/
+        });
 
     } catch (error) {
         res.status(500).json({
