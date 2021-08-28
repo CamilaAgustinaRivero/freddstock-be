@@ -8,6 +8,30 @@ const getTransactions = async(req, res = response) => {
     });
 }
 
+const getTransactionsByDate = async(req, res = response) => {
+    const { initial_date, final_date } = req.body;
+    try {
+        const reg = await Transaction.find({
+           date: {
+              $gte: initial_date,
+              $lt: final_date
+           }
+        });
+  
+        if (!reg) {
+           res.status(404).send({
+              message: 'El registro no existe'
+           });
+        } else {
+           res.status(200).json({reg});
+        }
+     } catch (e) {
+        res.status(500).send({
+           message: 'Ocurrio un error'
+        });
+     }
+}
+
 const createTransaction = async(req, res = response) => {
    const transaction = new Transaction(req.body);
     try {
@@ -75,6 +99,7 @@ const deleteTransaction = async(req, res = response) => {
 
 module.exports = {
     getTransactions,
+    getTransactionsByDate,
     createTransaction,
     updateTransaction,
     deleteTransaction,

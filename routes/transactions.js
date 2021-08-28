@@ -6,10 +6,12 @@
 const { Router } = require('express');
 const { check } = require('express-validator');
 const { validateFields } = require('../middlewares/fields');
-const { getTransactions, createTransaction, updateTransaction, deleteTransaction } = require('../controllers/transactions');
+const { getTransactions, getTransactionsByDate, createTransaction, updateTransaction, deleteTransaction } = require('../controllers/transactions');
 const router = Router();
 
 router.get('/', getTransactions);
+
+router.post('/:date', getTransactionsByDate);
 
 router.post(
     '/',
