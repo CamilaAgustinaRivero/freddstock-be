@@ -16,7 +16,7 @@ const getTransactionsByDate = async (req, res = response) => {
                 $gte: initial_date,
                 $lt: final_date
             }
-        });
+        }).populate(['operation_id', 'payment_id', 'product_id']);
 
         if (!reg) {
             res.status(404).send({
