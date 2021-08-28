@@ -1,21 +1,28 @@
 const { Schema, model } = require('mongoose');
 
 const TransactionSchema = Schema({
-    date: {
-        type: Date,
-        require: true
-    },
-    quantly: {
-        type: Number,
-        require: true
-    },
-    product_id: {
+    operation_id: {
         type: Schema.Types.ObjectId,
-        ref: 'Product'
+        ref: 'Operation',
+        required: true
     },
     payment_id: {
         type: Schema.Types.ObjectId,
-        ref: 'Payment'
+        ref: 'Payment',
+        required: true
+    },
+    product_id: {
+        type: Schema.Types.ObjectId,
+        ref: 'Product',
+        required: true
+    },
+    quantly: {
+        type: Number,
+        required: true
+    },
+    date: {
+        type: Date,
+        default: Date.now()
     }
 });
 
