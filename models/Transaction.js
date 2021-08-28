@@ -16,9 +16,13 @@ const TransactionSchema = Schema({
         ref: 'Product',
         required: true
     },
-    quantly: {
+    quantity: {
         type: Number,
         required: true
+    },
+    reason: {
+        type: String,
+        deafult: '[Razón]'
     },
     date: {
         type: Date,
