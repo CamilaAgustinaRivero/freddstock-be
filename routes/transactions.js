@@ -16,7 +16,7 @@ router.post('/:date', getTransactionsByDate);
 router.post(
     '/',
     [
-        check('quantity', 'Quantly must be an integer.').isInt(),
+        check('quantity', 'Quantity must be an integer.').isInt(),
         validateFields
     ],
     createTransaction
@@ -25,7 +25,7 @@ router.post(
 router.put(
     '/:id',
     [
-        check('quantity', 'Quantly must be an integer.').isInt(),
+        check('quantity', 'Quantity must be an integer.').isInt(),
         validateFields
     ],
     updateTransaction
