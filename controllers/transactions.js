@@ -1,39 +1,41 @@
 const { response } = require('express');
 const Transaction = require('../models/Transaction');
 
-const getTransactions = async(req, res = response) => {
+const getTransactions = async (req, res = response) => {
     const transactions = await Transaction.find().populate(['operation_id', 'payment_id', 'product_id']);
     res.status(200).json({
         transactions
     });
 }
 
-const getTransactionsByDate = async(req, res = response) => {
+const getTransactionsByDate = async (req, res = response) => {
     const { initial_date, final_date } = req.body;
     try {
         const reg = await Transaction.find({
-           date: {
-              $gte: initial_date,
-              $lt: final_date
-           }
+            date: {
+                $gte: initial_date,
+                $lt: final_date
+            }
         });
-  
+
         if (!reg) {
-           res.status(404).send({
-              message: 'El registro no existe'
-           });
+            res.status(404).send({
+                msg: 'Transactions does not exist.'
+            });
         } else {
-           res.status(200).json({reg});
+            res.status(200).json({
+                reg
+            });
         }
-     } catch (e) {
+    } catch (error) {
         res.status(500).send({
-           message: 'Ocurrio un error'
+            msg: 'Internal server error.'
         });
-     }
+    }
 }
 
-const createTransaction = async(req, res = response) => {
-   const transaction = new Transaction(req.body);
+const createTransaction = async (req, res = response) => {
+    const transaction = new Transaction(req.body);
     try {
         await transaction.save();
         res.status(201).json({
@@ -46,7 +48,7 @@ const createTransaction = async(req, res = response) => {
     }
 }
 
-const updateTransaction = async(req, res = response) => {
+const updateTransaction = async (req, res = response) => {
     const transactionId = req.params.id;
 
     try {
@@ -74,7 +76,7 @@ const updateTransaction = async(req, res = response) => {
     }
 }
 
-const deleteTransaction = async(req, res = response) => {
+const deleteTransaction = async (req, res = response) => {
     const transactionId = req.params.id;
 
     try {
