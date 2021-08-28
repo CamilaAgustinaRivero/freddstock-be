@@ -24,11 +24,11 @@ const ProductSchema = Schema({
     },
     description: {
         type: String,
-        default: 'Inserte la descripción del producto.'
+        default: '[Descripcion]'
     },
     code_bar: {
         type: String,
-        default: 'Inserte código de barras.'
+        default: '[Código de barras]'
     },
     stock: {
         type: Number,
