@@ -10,7 +10,7 @@ const { isPositive } = require('../helpers/isPositive');
 const { getProducts, createProduct, updateProduct, deleteProduct } = require('../controllers/products');
 const router = Router();
 
-router.get('/', getProducts);
+router.get('/:page', getProducts);
 
 router.post(
     '/',

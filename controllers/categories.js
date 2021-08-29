@@ -1,7 +1,7 @@
 const { response } = require('express');
 const Category = require('../models/Category');
 
-const getCategories = async(req, res = response) => {
+const getCategories = async (req, res = response) => {
     const categories = await Category.find();
     res.status(200).json({
         categories
@@ -22,7 +22,7 @@ const createCategory = async (req, res = response) => {
     }
 }
 
-const updateCategory = async(req, res = response) => {
+const updateCategory = async (req, res = response) => {
     const categoryId = req.params.id;
 
     try {
@@ -37,7 +37,7 @@ const updateCategory = async(req, res = response) => {
             ...req.body
         }
 
-        const updatedCategory= await Category.findByIdAndUpdate(categoryId, newCategory);
+        const updatedCategory = await Category.findByIdAndUpdate(categoryId, newCategory);
         res.status(200).json({
             original: updatedCategory
         });
@@ -49,7 +49,7 @@ const updateCategory = async(req, res = response) => {
     }
 }
 
-const deleteCategory = async(req, res = response) => {
+const deleteCategory = async (req, res = response) => {
     const categoryId = req.params.id;
 
     try {

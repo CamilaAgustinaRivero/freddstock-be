@@ -1,14 +1,18 @@
 const { response } = require('express');
 const Product = require('../models/Product');
 
-const getProducts = async(req, res = response) => {
-    const products = await Product.find().populate('category_id');
+const getProducts = async (req, res = response) => {
+    let perPage = 3;
+    let page = req.params.page || 1;
+    const products = await Product.find().populate('category_id').skip((perPage * page) - perPage).limit(perPage);
     res.status(200).json({
-        products
+        products,
+        current: page,
+        pages: Math.ceil(products.length / perPage)
     });
 }
 
-const createProduct = async(req, res = response) => {
+const createProduct = async (req, res = response) => {
     const product = new Product(req.body);
     try {
         await product.save();
@@ -22,7 +26,7 @@ const createProduct = async(req, res = response) => {
     }
 }
 
-const updateProduct = async(req, res = response) => {
+const updateProduct = async (req, res = response) => {
     const productId = req.params.id;
     try {
         const product = await Product.findById(productId);
@@ -32,7 +36,7 @@ const updateProduct = async(req, res = response) => {
             });
         }
 
-        if(req.body.stock < 0) {
+        if (req.body.stock < 0) {
             return res.status(500).json({
                 msg: 'Stock can not be negative.'
             });
@@ -53,7 +57,7 @@ const updateProduct = async(req, res = response) => {
     }
 }
 
-const deleteProduct = async(req, res = response) => {
+const deleteProduct = async (req, res = response) => {
     const productId = req.params.id;
 
     try {

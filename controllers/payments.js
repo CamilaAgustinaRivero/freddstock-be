@@ -1,7 +1,7 @@
 const { response } = require('express');
 const Payment = require('../models/Payment');
 
-const getPayments= async(req, res = response) => {
+const getPayments = async (req, res = response) => {
     const payments = await Payment.find();
     res.status(200).json({
         payments
@@ -22,7 +22,7 @@ const createPayment = async (req, res = response) => {
     }
 }
 
-const updatePayment = async(req, res = response) => {
+const updatePayment = async (req, res = response) => {
     const paymentId = req.params.id;
 
     try {
@@ -37,7 +37,7 @@ const updatePayment = async(req, res = response) => {
             ...req.body
         }
 
-        const updatedPayment= await Payment.findByIdAndUpdate(paymentId, newPayment);
+        const updatedPayment = await Payment.findByIdAndUpdate(paymentId, newPayment);
         res.status(200).json({
             original: updatedPayment
         });
@@ -49,7 +49,7 @@ const updatePayment = async(req, res = response) => {
     }
 }
 
-const deletePayment = async(req, res = response) => {
+const deletePayment = async (req, res = response) => {
     const paymentId = req.params.id;
 
     try {

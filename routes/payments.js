@@ -23,7 +23,7 @@ router.put(
     '/:id',
     [
         check('name', 'Payment name is required.').not().isEmpty(),
-        validateFields   
+        validateFields
     ],
     updatePayment
 );

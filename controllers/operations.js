@@ -1,7 +1,7 @@
 const { response } = require('express');
 const Operation = require('../models/Operation');
 
-const getOperations = async(req, res = response) => {
+const getOperations = async (req, res = response) => {
     const operations = await Operation.find();
     res.status(200).json({
         operations
@@ -22,7 +22,7 @@ const createOperation = async (req, res = response) => {
     }
 }
 
-const updateOperation = async(req, res = response) => {
+const updateOperation = async (req, res = response) => {
     const operationId = req.params.id;
 
     try {
@@ -37,7 +37,7 @@ const updateOperation = async(req, res = response) => {
             ...req.body
         }
 
-        const updatedOperation= await Operation.findByIdAndUpdate(operationId, newOperation);
+        const updatedOperation = await Operation.findByIdAndUpdate(operationId, newOperation);
         res.status(200).json({
             original: updatedOperation
         });
@@ -49,7 +49,7 @@ const updateOperation = async(req, res = response) => {
     }
 }
 
-const deleteOperation = async(req, res = response) => {
+const deleteOperation = async (req, res = response) => {
     const operationId = req.params.id;
 
     try {
