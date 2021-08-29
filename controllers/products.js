@@ -24,7 +24,6 @@ const createProduct = async(req, res = response) => {
 
 const updateProduct = async(req, res = response) => {
     const productId = req.params.id;
-
     try {
         const product = await Product.findById(productId);
         if (!product) {
@@ -33,12 +32,11 @@ const updateProduct = async(req, res = response) => {
             });
         }
 
-        if(product.stock < 0) {
+        if(req.body.stock < 0) {
             return res.status(500).json({
                 msg: 'Stock can not be negative.'
             });
         }
-
         const newProduct = {
             ...req.body
         }
