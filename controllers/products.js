@@ -33,6 +33,12 @@ const updateProduct = async(req, res = response) => {
             });
         }
 
+        if(product.stock < 0) {
+            return res.status(500).json({
+                msg: 'Stock can not be negative.'
+            });
+        }
+
         const newProduct = {
             ...req.body
         }

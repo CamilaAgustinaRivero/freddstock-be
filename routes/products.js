@@ -6,6 +6,7 @@
 const { Router } = require('express');
 const { check } = require('express-validator');
 const { validateFields } = require('../middlewares/fields');
+const { isPositive } = require('../helpers/isPositive');
 const { getProducts, createProduct, updateProduct, deleteProduct } = require('../controllers/products');
 const router = Router();
 
@@ -18,7 +19,7 @@ router.post(
         check('brand', 'Brand is required.').not().isEmpty(),
         check('buy_price', 'Buy price must be a number.').isNumeric(),
         check('sell_price', 'Sell price must be a number.').isNumeric(),
-        check('stock', 'Stock must be an integer.').isInt(),
+        check('stock', 'Stock must be a positive integer.').custom(isPositive),
         validateFields
     ],
     createProduct
@@ -31,7 +32,7 @@ router.put(
         check('brand', 'Brand is required.').not().isEmpty(),
         check('buy_price', 'Buy price must be a number.').isNumeric(),
         check('sell_price', 'Sell price must be a number.').isNumeric(),
-        check('stock', 'Stock must be an integer.').isInt(),
+        check('stock', 'Stock must be a positive integer.').custom(isPositive),
         validateFields
     ],
     updateProduct
