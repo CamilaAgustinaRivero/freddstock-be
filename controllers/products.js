@@ -2,7 +2,7 @@ const { response } = require('express');
 const Product = require('../models/Product');
 
 const getProducts = async (req, res = response) => {
-    let perPage = 3;
+    let perPage = 5;
     let page = req.params.page || 1;
     const products = await Product.find().populate('category_id').skip((perPage * page) - perPage).limit(perPage);
     res.status(200).json({
