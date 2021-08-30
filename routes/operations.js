@@ -18,7 +18,7 @@ router.post(
         validateFields
     ],
     createOperation
-); 
+);
 
 router.put(
     '/:id',

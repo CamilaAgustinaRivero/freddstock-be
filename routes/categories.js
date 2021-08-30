@@ -18,7 +18,7 @@ router.post(
         validateFields
     ],
     createCategory
-); 
+);
 
 router.put(
     '/:id',

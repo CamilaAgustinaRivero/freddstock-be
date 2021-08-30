@@ -1,4 +1,4 @@
-const {Schema, model} = require('mongoose');
+const { Schema, model } = require('mongoose');
 
 const PaymentSchema = Schema({
     name: {
@@ -7,4 +7,4 @@ const PaymentSchema = Schema({
     }
 });
 
-module.exports = model('Payment', PaymentSchema) 
+module.exports = model('Payment', PaymentSchema)
