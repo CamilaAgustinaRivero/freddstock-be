@@ -15,7 +15,7 @@ const getTransactionsByDate = async (req, res = response) => {
         const transactions = await Transaction.find({
             date: {
                 $gte: initial_date,
-                $lt: final_date
+                $lte: final_date
             }
         }).populate(['operation_id', 'payment_id', 'product_id']);
 
@@ -24,7 +24,7 @@ const getTransactionsByDate = async (req, res = response) => {
                 $match: {
                     date: {
                         $gte: new Date(initial_date),
-                        $lt: new Date(final_date)
+                        $lte: new Date(final_date)
                     }
                 }
             },
@@ -64,8 +64,8 @@ const getTransactionsByDate = async (req, res = response) => {
             });
         } else {
             res.status(200).json({
-                finalEarns,
-                transactions
+                finalEarns: [...finalEarns],
+                transactions: [...transactions]
             });
         }
         
