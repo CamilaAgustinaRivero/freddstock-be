@@ -2,7 +2,8 @@ const { response } = require('express');
 const Transaction = require('../models/Transaction');
 
 const getTransactions = async (req, res = response) => {
-    const transactions = await Transaction.find().populate(['operation_id', 'payment_id', 'product_id']);
+    const transactions = await Transaction.find().populate(['operation_id', 'payment_id', 'product_id']).sort({date: -1});
+
     res.status(200).json({
         transactions
     });
@@ -11,22 +12,63 @@ const getTransactions = async (req, res = response) => {
 const getTransactionsByDate = async (req, res = response) => {
     const { initial_date, final_date } = req.body;
     try {
-        const reg = await Transaction.find({
+        const transactions = await Transaction.find({
             date: {
                 $gte: initial_date,
                 $lt: final_date
             }
         }).populate(['operation_id', 'payment_id', 'product_id']);
 
-        if (!reg) {
+        const earns = await Transaction.aggregate([
+            {
+                $match: {
+                    date: {
+                        $gte: new Date(initial_date),
+                        $lt: new Date(final_date)
+                    }
+                }
+            },
+            {
+                $group: {
+                    _id: '$product_id',
+                    total_quantity: {'$sum' : '$quantity'}
+                }
+            },
+            {
+                $lookup: {
+                    from: 'products',
+                    localField: '_id',
+                    foreignField: '_id',
+                    as: 'product'
+                }
+            },
+            {
+                $unwind: "$product",
+            }
+            ]).sort({ total_quantity: -1})
+            
+            const finalEarns = earns.map(t => {
+                const finalEarn = t.product.sell_price * t.total_quantity- t.product.buy_price * t.product.stock
+                return {
+                    ...t,
+                    total_earn: finalEarn,
+                    product: {
+                        ...t.product,
+                    },
+                }
+            })
+
+        if (!transactions) {
             res.status(404).send({
                 msg: 'Transactions does not exist.'
             });
         } else {
             res.status(200).json({
-                reg
+                finalEarns,
+                transactions
             });
         }
+        
     } catch (error) {
         res.status(500).send({
             msg: 'Internal server error.'
