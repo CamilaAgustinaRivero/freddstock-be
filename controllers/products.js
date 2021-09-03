@@ -1,5 +1,7 @@
 const { response } = require('express');
 const Product = require('../models/Product');
+const Operation = require('../models/Operation');
+const Transaction = require('../models/Transaction');
 
 const getProducts = async (req, res = response) => {
     let perPage = 5;
@@ -16,10 +18,20 @@ const getProducts = async (req, res = response) => {
 
 const createProduct = async (req, res = response) => {
     const product = new Product(req.body);
+    const [buyOperation] = await Operation.find({name: 'Compra'})
+    const transaction = new Transaction({
+        operation_id: buyOperation._id,
+        product_id: product._id,
+        quantity: product.stock,
+        reason: 'Creación de producto.'
+    })
+
     try {
         await product.save();
+        await transaction.save();
         res.status(201).json({
-            product
+            product,
+            transaction
         });
     } catch (error) {
         res.status(500).json({

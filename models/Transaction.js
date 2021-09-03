@@ -9,7 +9,7 @@ const TransactionSchema = Schema({
     payment_id: {
         type: Schema.Types.ObjectId,
         ref: 'Payment',
-        required: true
+        // required: true
     },
     product_id: {
         type: Schema.Types.ObjectId,
