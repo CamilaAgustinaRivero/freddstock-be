@@ -4,11 +4,13 @@ const Product = require('../models/Product');
 const getProducts = async (req, res = response) => {
     let perPage = 5;
     let page = req.params.page || 1;
-    const products = await Product.find().populate('category_id').skip((perPage * page) - perPage).limit(perPage);
+    // const products = await Product.find().populate('category_id').skip((perPage * page) - perPage).limit(perPage);
+    const products = await Product.find().populate('category_id');
+    const productCount = await Product.count()
     res.status(200).json({
         products,
         current: page,
-        pages: Math.ceil(products.length / perPage)
+        pages: Math.ceil(productCount / perPage)
     });
 }
 

@@ -1,5 +1,6 @@
 const { response } = require('express');
 const Transaction = require('../models/Transaction');
+const Operation = require('../models/Operation')
 
 const getTransactions = async (req, res = response) => {
     const transactions = await Transaction.find().populate(['operation_id', 'payment_id', 'product_id']).sort({date: -1});
@@ -18,20 +19,21 @@ const getTransactionsByDate = async (req, res = response) => {
                 $lte: final_date
             }
         }).populate(['operation_id', 'payment_id', 'product_id']);
-
+        const operationId = await Operation.find({ name: 'Corrección'})
         const earns = await Transaction.aggregate([
             {
                 $match: {
                     date: {
                         $gte: new Date(initial_date),
                         $lte: new Date(final_date)
-                    }
+                    },                    
                 }
             },
             {
                 $group: {
                     _id: '$product_id',
-                    total_quantity: {'$sum' : '$quantity'}
+                    total_quantity: {'$sum' : '$quantity'},
+                    operation_id: {'$first' : '$operation_id'}
                 }
             },
             {
@@ -46,7 +48,6 @@ const getTransactionsByDate = async (req, res = response) => {
                 $unwind: "$product",
             }
             ]).sort({ total_quantity: -1})
-            
             const finalEarns = earns.map(t => {
                 const finalEarn = t.product.sell_price * t.total_quantity- t.product.buy_price * t.product.stock
                 return {
